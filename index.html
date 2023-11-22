@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EEG Viewer</title>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .title-text {
+            text-align: center;
+            color: white;
+            font-size: 40px;
+            padding: 20px 0;
+        }
+        header nav {
+            background-color: black;
+        }
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 0;
+        }
+        header nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+        header nav ul li a {
+            text-decoration: none;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #222;
+        }
+        #slider-container {
+            text-align: center;
+            color: white;
+            padding: 10px;
+        }
+        .channel-text {
+            color: white;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="title-text">
+        EEG VIEWER
+    </div>
+
+    <form action="/" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".vhdr">
+        <input type="submit" value="Upload">
+    </form>
+
+    <div id="slider-container">
+        <label for="data-slider">Highlight Range:</label>
+        <input type="range" id="data-slider" min="0" max="299" step="1" value="0">
+        <span id="slider-value">0</span>
+    </div>
+
+    <canvas id="myChart" width="1800" height="800"></canvas>
+
+    <script>
+        var eegData0 = "{{ eeg_data_0 }}";
+        var eegData1 = "{{ eeg_data_1 }}";
+        var eegData2 = "{{ eeg_data_2 }}";
+        var eegData3 = "{{ eeg_data_3 }}";
+        var eegData4 = "{{ eeg_data_4 }}";
+        var eegData5 = "{{ eeg_data_5 }}";
+        var eegData6 = "{{ eeg_data_6 }}";
+        var eegData7 = "{{ eeg_data_7 }}";
+        var eegData8 = "{{ eeg_data_8 }}";
+
+        var dataArray0 = eegData0.split(",").map(Number);
+        var dataArray1 = eegData1.split(",").map(Number);
+        var dataArray2 = eegData2.split(",").map(Number);
+        var dataArray3 = eegData3.split(",").map(Number);
+        var dataArray4 = eegData4.split(",").map(Number);
+        var dataArray5 = eegData5.split(",").map(Number);
+        var dataArray6 = eegData6.split(",").map(Number);
+        var dataArray7 = eegData7.split(",").map(Number);
+        var dataArray8 = eegData8.split(",").map(Number);
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: dataArray0.length }, (_, i) => String(i)),
+                datasets: [
+                    {
+                        label: 'Ch1=Fp1',
+                        data: dataArray0,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        pointBackgroundColor: Array(dataArray0.length).fill('rgba(0, 0, 0, 0)'),
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Ch2=Fp2',
+                        data: dataArray1,
+                        borderColor: 'rgb(95, 0, 170)',
+                        tension: 0.1,
+                        pointBackgroundColor: Array(dataArray1.length).fill('rgba(0, 0, 0, 0)'),
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Ch3=F3',
+                        data: dataArray2,
+                        borderColor: 'rgb(115, 168, 0)',
+                        tension: 0.1,
+                        pointBackgroundColor: Array(dataArray2.length).fill('rgba(0, 0, 0, 0)'),
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Ch4=F4',
+                        data: dataArray3,
+                        borderColor: 'rgb(135, 156, 126)',
+                        tension: 0.1,
+                        pointBackgroundColor: Array(dataArray3.length).fill('rgba(0, 0, 0, 0)'),
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Ch5=C3',
+                        data: dataArray4,
+                        borderColor: 'rgb(155, 44, 104)',
+                        tension: 0.1,
+                        pointBackgroundColor: Array(dataArray4.length).fill('rgba(0, 0, 0, 0)'),
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Ch6=C4',
+                        data: dataArray5,
+                        borderColor: 'rgb(175, 132, 0)',
+                        tension: 0.1,
+                        pointBackgroundColor: Array(dataArray5.length).fill('rgba(0, 0, 0, 0)'),
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Ch7=P3',
+                        data: dataArray6,
+                        borderColor: 'rgb(195, 120, 60)',
+                        tension: 0.1,
+                        pointBackgroundColor: Array(dataArray6.length).fill('rgba(0, 0, 0, 0)'),
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Ch8=P4',
+                        data: dataArray7,
+                        borderColor: 'rgb(215, 108, 38)',
+                        tension: 0.1,
+                        pointBackgroundColor: Array(dataArray7.length).fill('rgba(0, 0, 0, 0)'),
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Ch9=P5',
+                        data: dataArray8,
+                        borderColor: 'rgb(215, 208, 38)',
+                        tension: 0.1,
+                        pointBackgroundColor: Array(dataArray8.length).fill('rgba(0, 0, 0, 0)'),
+                        pointRadius: 5
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        document.getElementById('data-slider').addEventListener('input', function () {
+            var sliderValue = parseInt(this.value);
+            document.getElementById('slider-value').textContent = sliderValue;
+
+            myChart.data.datasets.forEach(function (dataset) {
+                dataset.pointBackgroundColor = dataset.data.map(function (_, index) {
+                    return index === sliderValue ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 0, 0, 0)';
+                });
+            });
+
+            myChart.update();
+        });
+    </script>
+</body>
+</html>
